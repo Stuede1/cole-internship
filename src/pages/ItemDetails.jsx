@@ -8,6 +8,8 @@ import axios from "axios";
 const ItemDetails = () => {
   const { nftId } = useParams();
   const [item, setItem] = useState(null);
+  const [author, setAuthor] = useState(null);
+  const [creator, setCreator] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -39,6 +41,53 @@ const ItemDetails = () => {
         }
         
         setItem(foundItem);
+        
+        // Debug: log the item data to see what fields are available
+        console.log('Found item:', foundItem);
+        
+        // If we found an item and it has an authorId, fetch the author details
+        if (foundItem && foundItem.authorId) {
+          try {
+            const authorResponse = await axios.get('https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers');
+            const sellers = authorResponse.data;
+            const foundAuthor = sellers.find(seller => seller.authorId == foundItem.authorId);
+            setAuthor(foundAuthor);
+            console.log('Found author:', foundAuthor);
+          } catch (err) {
+            console.log('Failed to fetch author details');
+          }
+        }
+        
+        // Fetch creator information - check if the item has creator-specific fields
+        try {
+          const authorResponse = await axios.get('https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers');
+          const sellers = authorResponse.data;
+          
+          let foundCreator = null;
+          
+          // Check for various possible creator fields in the item
+          if (foundItem.creatorId) {
+            foundCreator = sellers.find(seller => seller.authorId == foundItem.creatorId);
+          } else if (foundItem.creator && foundItem.creator.authorId) {
+            foundCreator = sellers.find(seller => seller.authorId == foundItem.creator.authorId);
+          } else if (foundItem.createdBy) {
+            foundCreator = sellers.find(seller => seller.authorId == foundItem.createdBy);
+          }
+          
+          // If no specific creator found, we could either:
+          // 1. Use the same as owner (current owner is often the creator)
+          // 2. Use a different logic based on your requirements
+          if (!foundCreator) {
+            // For now, let's use the same as owner, but you can change this logic
+            foundCreator = author;
+          }
+          
+          setCreator(foundCreator);
+          console.log('Found creator:', foundCreator);
+        } catch (err) {
+          console.log('Failed to fetch creator details');
+        }
+        
         // Scroll to top after data is loaded
         window.scrollTo(0, 0);
       } catch (err) {
@@ -136,28 +185,28 @@ const ItemDetails = () => {
                   <div className="item_info_counts">
                     <div className="item_info_views">
                       <i className="fa fa-eye"></i>
-                      100
+                      {item.views || 100}
                     </div>
                     <div className="item_info_like">
                       <i className="fa fa-heart"></i>
-                      {item.likes || 74}
+                      {item.likes || 99}
                     </div>
                   </div>
                   <p>
-                    Beautiful NFT collection from our curated marketplace.
+                    {item.description || "Beautiful NFT collection from our curated marketplace."}
                   </p>
                   <div className="d-flex flex-row">
                     <div className="mr40">
                       <h6>Owner</h6>
                       <div className="item_author">
                         <div className="author_list_pp">
-                          <Link to="/author">
-                            <img className="lazy" src={item.authorImage || AuthorImage} alt="Author" />
+                          <Link to={`/author/${item.authorId || 'unknown'}`}>
+                            <img className="lazy" src={author?.authorImage || item.authorImage || AuthorImage} alt="Author" />
                             <i className="fa fa-check"></i>
                           </Link>
                         </div>
                         <div className="author_list_info">
-                          <Link to="/author">Artist #{item.authorId || 'Unknown'}</Link>
+                          <Link to={`/author/${item.authorId || 'unknown'}`}>{author?.authorName || `Artist #${item.authorId || 'Unknown'}`}</Link>
                         </div>
                       </div>
                     </div>
@@ -168,13 +217,13 @@ const ItemDetails = () => {
                       <h6>Creator</h6>
                       <div className="item_author">
                         <div className="author_list_pp">
-                          <Link to="/author">
-                            <img className="lazy" src={item.authorImage || AuthorImage} alt="Author" />
+                          <Link to={`/author/${creator?.authorId || 'unknown'}`}>
+                            <img className="lazy" src={creator?.authorImage || AuthorImage} alt="Creator" />
                             <i className="fa fa-check"></i>
                           </Link>
                         </div>
                         <div className="author_list_info">
-                          <Link to="/author">Creator #{item.authorId || 'Unknown'}</Link>
+                          <Link to={`/author/${creator?.authorId || 'unknown'}`}>{creator?.authorName || `Creator #${item.authorId || 'Unknown'}`}</Link>
                         </div>
                       </div>
                     </div>
@@ -182,7 +231,7 @@ const ItemDetails = () => {
                     <h6>Price</h6>
                     <div className="nft-item-price">
                       <img src={EthImage} alt="" />
-                      <span>{item.price ? `${item.price} ETH` : `ERC-${item.code || '192'}`}</span>
+                      <span>{item.price ? `${item.price} ETH` : `${(Math.random() * 10 + 0.5).toFixed(2)} ETH`}</span>
                     </div>
                   </div>
                 </div>
