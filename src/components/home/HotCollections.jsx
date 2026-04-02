@@ -6,33 +6,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AuthorImage from "../../images/author_thumbnail.jpg";
 import nftImage from "../../images/nftImage.jpg";
+import { CustomNextArrow, CustomPrevArrow } from "../UI/SliderArrows";
+import SectionHeader from "../UI/SectionHeader";
 import "./HotCollections.css";
-
-const CustomNextArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={`${className} customNextArrow`}
-      style={{ ...style, display: "flex", right: "-20px" }}
-      onClick={onClick}
-    >
-      ›
-    </div>
-  );
-};
-
-const CustomPrevArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={`${className} customPrevArrow`}
-      style={{ ...style, display: "flex", left: "-20px" }}
-      onClick={onClick}
-    >
-      ‹
-    </div>
-  );
-};
 
 const HotCollections = () => {
   const [collections, setCollections] = useState([]);
@@ -95,12 +71,7 @@ const HotCollections = () => {
     <section id="section-collections" className="no-bottom">
       <div className="container">
         <div className="row">
-          <div className="col-lg-12">
-            <div className="text-center">
-              <h2>Hot Collections</h2>
-              <div className="small-border bg-color-2"></div>
-            </div>
-          </div>
+          <SectionHeader title="Hot Collections" />
         </div>
         <div className="row">
           <div className="col-lg-12">
