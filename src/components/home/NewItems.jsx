@@ -141,7 +141,7 @@ const NewItems = () => {
                       <div key={index} className="px-2">
                         <div className="nft__item">
                           <div className="author_list_pp">
-                            <Link to="/author">
+                            <Link to={`/author/${item.authorId}`}>
                               <img className="lazy" src={item.authorImage || AuthorImage} alt="" />
                               <i className="fa fa-check"></i>
                             </Link>
