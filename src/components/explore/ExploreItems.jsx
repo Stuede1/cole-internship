@@ -38,7 +38,7 @@ const ExploreItems = () => {
   const handleFilterChange = (e) => {
     const newFilter = e.target.value;
     setCurrentFilter(newFilter);
-    setItemsToShow(8); // Reset to 8 items when filter changes
+    setItemsToShow(8); 
   };
 
   const handleLoadMore = () => {

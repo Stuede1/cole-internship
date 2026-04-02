@@ -185,7 +185,7 @@ const ItemDetails = () => {
                     <h6>Price</h6>
                     <div className="nft-item-price">
                       <img src={EthImage} alt="" />
-                      <span>{item.price ? `${item.price} ETH` : '0.00 ETH'}</span>
+                      <span>{item.price ? `${item.price}` : '0.00 ETH'}</span>
                     </div>
                   </div>
                 </div>
