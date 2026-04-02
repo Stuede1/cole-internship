@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
-import nftImage from "../../images/nftImage.jpg";
 import NFTCard from "../UI/NFTCard";
-import "../home/HotCollections.css";
+import SkeletonCard from "../UI/SkeletonCard";
+import axios from "axios";
 
 const AuthorItems = ({ authorId }) => {
   const [authorItems, setAuthorItems] = useState([]);
@@ -17,41 +16,11 @@ const AuthorItems = ({ authorId }) => {
       try {
         setLoading(true);
         
-        // Fetch author info from top sellers API
-        const authorResponse = await fetch('https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers');
-        const sellers = await authorResponse.json();
-        const foundAuthor = sellers.find(seller => seller.authorId == authorId);
+        const response = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${authorId}`);
+        const authorData = response.data;
         
-        if (foundAuthor) {
-          setAuthor(foundAuthor);
-        }
-
-        // Fetch new items
-        const itemsResponse = await fetch('https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems');
-        const allItems = await itemsResponse.json();
-        
-        // Create author-specific items by using different subsets of items for each author
-        // This ensures each author has different posts
-        const authorSpecificItems = allItems
-          .sort(() => Math.random() - 0.5) // Shuffle the items randomly
-          .slice(0, 8) // Take first 8 shuffled items
-          .map((item, index) => ({
-            ...item,
-            id: `${authorId}-${item.id || index}`,
-            // Use the actual NFT title instead of Collection #1 format
-            title: item.title || "Untitled NFT",
-            // Keep the original NFT image, but each author gets different shuffled images
-            nftImage: item.nftImage || nftImage,
-            authorImage: foundAuthor?.authorImage || AuthorImage,
-            authorName: foundAuthor?.authorName || 'Unknown Author',
-            authorId: authorId,
-            // Vary the price slightly for each author
-            price: (parseFloat(item.price || 1) + (authorId % 10) * 0.1).toFixed(2),
-            // Vary likes based on author
-            likes: (item.likes || 50) + (parseInt(authorId) % 100)
-          }));
-        
-        setAuthorItems(authorSpecificItems.slice(0, 8)); // Show first 8 items
+        setAuthor(authorData);
+        setAuthorItems(authorData.nftCollection || []);
         
       } catch (err) {
         setError('Failed to fetch author items');
@@ -73,18 +42,7 @@ const AuthorItems = ({ authorId }) => {
           <div className="row">
             {skeletonItems.map((_, index) => (
               <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12" key={index}>
-                <div className="nft__item">
-                  <div className="author_list_pp">
-                    <div className="hc-skeleton hc-skeleton__avatar" />
-                  </div>
-                  <div className="nft__item_wrap">
-                    <div className="hc-skeleton hc-skeleton__img" style={{height: '220px'}} />
-                  </div>
-                  <div className="nft__item_info">
-                    <div className="hc-skeleton hc-skeleton__title" />
-                    <div className="hc-skeleton hc-skeleton__subtitle" />
-                  </div>
-                </div>
+                <SkeletonCard type="nft" />
               </div>
             ))}
           </div>
@@ -111,10 +69,10 @@ const AuthorItems = ({ authorId }) => {
             <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12" key={item.id || index}>
               <NFTCard
                 item={item}
-                authorImage={author?.authorImage || AuthorImage}
-                authorName={author?.authorName || "Unknown Author"}
+                authorImage={author?.authorImage}
+                authorName={author?.authorName}
                 authorId={authorId}
-                nftImage={item.nftImage || nftImage}
+                nftImage={item.nftImage}
               />
             </div>
           )) : (

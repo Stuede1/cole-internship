@@ -4,31 +4,21 @@ import AuthorBanner from "../images/author_banner.jpg";
 import AuthorItems from "../components/author/AuthorItems";
 import { Link } from "react-router-dom";
 import AuthorImage from "../images/author_thumbnail.jpg";
+import axios from "axios";
 
 const Author = () => {
   const { authorId } = useParams();
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     const fetchAuthorData = async () => {
       try {
-        // First try to get author from top sellers API
-        const response = await fetch('https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers');
-        const sellers = await response.json();
-        const foundAuthor = sellers.find(seller => seller.authorId == authorId);
-        
-        if (foundAuthor) {
-          setAuthor(foundAuthor);
-        } else {
-          // Fallback to default author if not found
-          setAuthor({
-            authorName: "Unknown Author",
-            authorImage: AuthorImage,
-            authorId: authorId,
-            price: 0
-          });
-        }
+        console.log('Fetching author with ID:', authorId); // Debug log
+        const response = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${authorId}`);
+        console.log('Author API response:', response.data); // Debug log
+        setAuthor(response.data);
       } catch (error) {
         console.error('Error fetching author:', error);
         // Fallback to default author on error
@@ -36,7 +26,9 @@ const Author = () => {
           authorName: "Unknown Author",
           authorImage: AuthorImage,
           authorId: authorId,
-          price: 0
+          followers: 0,
+          tag: "unknown",
+          address: "Unknown Address"
         });
       } finally {
         setLoading(false);
@@ -48,6 +40,23 @@ const Author = () => {
     }
   }, [authorId]);
 
+  const handleFollowToggle = () => {
+    if (isFollowing) {
+      // Unfollow: decrement followers
+      setAuthor(prev => ({
+        ...prev,
+        followers: prev.followers - 1
+      }));
+    } else {
+      // Follow: increment followers
+      setAuthor(prev => ({
+        ...prev,
+        followers: prev.followers + 1
+      }));
+    }
+    setIsFollowing(!isFollowing);
+  };
+
   if (loading) {
     return <div>Loading author...</div>;
   }
@@ -55,6 +64,9 @@ const Author = () => {
   if (!author) {
     return <div>Author not found</div>;
   }
+
+  // Debug: Check if author has expected data
+  console.log('Author state:', author);
 
   return (
     <div id="wrapper">
@@ -82,9 +94,9 @@ const Author = () => {
                       <div className="profile_name">
                         <h4>
                           {author.authorName}
-                          <span className="profile_username">@{author.authorName.toLowerCase().replace(/\s+/g, '')}</span>
+                          <span className="profile_username">@{author.tag}</span>
                           <span id="wallet" className="profile_wallet">
-                            UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
+                            {author.address}
                           </span>
                           <button id="btn_copy" title="Copy Text">
                             Copy
@@ -95,9 +107,9 @@ const Author = () => {
                   </div>
                   <div className="profile_follow de-flex">
                     <div className="de-flex-col">
-                      <div className="profile_follower">{author?.followers || Math.floor(Math.random() * 1000) + 100} followers</div>
-                      <Link to="#" className="btn-main">
-                        Follow
+                      <div className="profile_follower">{author.followers} followers</div>
+                      <Link to="#" className="btn-main" onClick={handleFollowToggle}>
+                        {isFollowing ? 'Unfollow' : 'Follow'}
                       </Link>
                     </div>
                   </div>

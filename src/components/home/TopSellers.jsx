@@ -16,6 +16,7 @@ const TopSellers = () => {
         setLoading(true);
         const response = await fetch('https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers');
         const data = await response.json();
+        console.log('Top sellers API response:', data); // Debug log
         setSellers(data);
       } catch (error) {
         setError('Failed to fetch top sellers');
@@ -55,36 +56,22 @@ const TopSellers = () => {
                         </div>
                       </li>
                     ))
-                  : (sellers.length ? sellers : skeletonItems).map((seller, index) => (
+                  : sellers.map((seller, index) => (
                       <li key={seller.id || index}>
-                        {sellers.length ? (
-                          <>
-                            <div className="author_list_pp">
-                              <Link to={`/author/${seller.authorId}`}>
-                                <img
-                                  className="lazy pp-author"
-                                  src={seller.authorImage}
-                                  alt={seller.authorName}
-                                />
-                                <i className="fa fa-check"></i>
-                              </Link>
-                            </div>
-                            <div className="author_list_info">
-                              <Link to={`/author/${seller.authorId}`}>{seller.authorName}</Link>
-                              <span>{seller.price} ETH</span>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="author_list_pp">
-                              <div className="hc-skeleton hc-skeleton__avatar" />
-                            </div>
-                            <div className="author_list_info">
-                              <div className="hc-skeleton hc-skeleton__title" />
-                              <div className="hc-skeleton hc-skeleton__subtitle" />
-                            </div>
-                          </>
-                        )}
+                        <div className="author_list_pp">
+                          <Link to={`/author/${seller.authorId}`}>
+                            <img
+                              className="lazy pp-author"
+                              src={seller.authorImage}
+                              alt={seller.authorName}
+                            />
+                            <i className="fa fa-check"></i>
+                          </Link>
+                        </div>
+                        <div className="author_list_info">
+                          <Link to={`/author/${seller.authorId}`}>{seller.authorName}</Link>
+                          <span>{seller.price} ETH</span>
+                        </div>
                       </li>
                     ))}
               </ol>
