@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import NFTCard from "../UI/NFTCard";
 import SkeletonCard from "../UI/SkeletonCard";
+import "../home/HotCollections.css";
 
 const ExploreItems = () => {
   const [exploreItems, setExploreItems] = useState([]);

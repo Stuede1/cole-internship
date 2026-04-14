@@ -4,6 +4,7 @@ import AuthorImage from "../../images/author_thumbnail.jpg";
 import SectionHeader from "../UI/SectionHeader";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import SkeletonCard from "../UI/SkeletonCard";
 import "./HotCollections.css";
 
 const TopSellers = () => {
@@ -57,13 +58,7 @@ const TopSellers = () => {
                 {loading
                   ? skeletonItems.map((_, index) => (
                       <li key={index}>
-                        <div className="author_list_pp">
-                          <div className="hc-skeleton hc-skeleton__avatar" />
-                        </div>
-                        <div className="author_list_info">
-                          <div className="hc-skeleton hc-skeleton__title" />
-                          <div className="hc-skeleton hc-skeleton__subtitle" />
-                        </div>
+                        <SkeletonCard type="author" />
                       </li>
                     ))
                   : sellers.map((seller, index) => (

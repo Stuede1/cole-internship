@@ -5,6 +5,8 @@ import AuthorItems from "../components/author/AuthorItems";
 import { Link } from "react-router-dom";
 import AuthorImage from "../images/author_thumbnail.jpg";
 import axios from "axios";
+import SkeletonCard from "../components/UI/SkeletonCard";
+import "../components/home/HotCollections.css";
 
 const Author = () => {
   const { authorId } = useParams();
@@ -58,7 +60,7 @@ const Author = () => {
   };
 
   if (loading) {
-    return <div>Loading author...</div>;
+    return <SkeletonCard type="author-profile" />;
   }
 
   if (!author) {

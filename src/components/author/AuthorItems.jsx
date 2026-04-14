@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import NFTCard from "../UI/NFTCard";
 import SkeletonCard from "../UI/SkeletonCard";
 import axios from "axios";
+import "../home/HotCollections.css";
 
 const AuthorItems = ({ authorId }) => {
   const [authorItems, setAuthorItems] = useState([]);

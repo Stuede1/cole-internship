@@ -10,6 +10,7 @@ import { CustomNextArrow, CustomPrevArrow } from "../UI/SliderArrows";
 import SectionHeader from "../UI/SectionHeader";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import SkeletonCard from "../UI/SkeletonCard";
 import "./HotCollections.css";
 
 const HotCollections = () => {
@@ -95,18 +96,7 @@ const HotCollections = () => {
                 {loading
                   ? skeletonItems.map((_, index) => (
                       <div key={index} className="px-2">
-                        <div className="nft_coll">
-                          <div className="nft_wrap">
-                            <div className="hc-skeleton hc-skeleton__img" />
-                          </div>
-                          <div className="nft_coll_pp">
-                            <div className="hc-skeleton hc-skeleton__avatar" />
-                          </div>
-                          <div className="nft_coll_info">
-                            <div className="hc-skeleton hc-skeleton__title" />
-                            <div className="hc-skeleton hc-skeleton__subtitle" />
-                          </div>
-                        </div>
+                        <SkeletonCard type="collection" />
                       </div>
                     ))
                   : (collections.length ? collections : skeletonItems).map((collection, index) => (
@@ -141,18 +131,7 @@ const HotCollections = () => {
                               </div>
                             </>
                           ) : (
-                            <>
-                              <div className="nft_wrap">
-                                <div className="hc-skeleton hc-skeleton__img" />
-                              </div>
-                              <div className="nft_coll_pp">
-                                <div className="hc-skeleton hc-skeleton__avatar" />
-                              </div>
-                              <div className="nft_coll_info">
-                                <div className="hc-skeleton hc-skeleton__title" />
-                                <div className="hc-skeleton hc-skeleton__subtitle" />
-                              </div>
-                            </>
+                            <SkeletonCard type="collection" />
                           )}
                         </div>
                       </div>

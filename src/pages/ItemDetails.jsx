@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import AuthorImage from "../images/author_thumbnail.jpg";
 import nftImage from "../images/nftImage.jpg";
 import axios from "axios";
+import SkeletonCard from "../components/UI/SkeletonCard";
+import "../components/home/HotCollections.css";
 
 const ItemDetails = () => {
   const { nftId } = useParams();
@@ -64,13 +66,7 @@ const ItemDetails = () => {
           <div id="top"></div>
           <section aria-label="section" className="mt90 sm-mt-0">
             <div className="container">
-              <div className="row">
-                <div className="col-md-12 text-center">
-                  <div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
-              </div>
+              <SkeletonCard type="item-details" />
             </div>
           </section>
         </div>
