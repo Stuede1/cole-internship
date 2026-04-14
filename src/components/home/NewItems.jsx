@@ -106,7 +106,7 @@ const NewItems = () => {
                         <div className="d-lg-none">
                           <div className="nft_coll">
                             <div className="nft_wrap">
-                              <Link to={`/item-details/${item.id || item.nftId}`}>
+                              <Link to={`/item-details/${item.nftId || item.id}`}>
                                 <img
                                   src={item.nftImage || nftImage}
                                   className="lazy img-fluid"
