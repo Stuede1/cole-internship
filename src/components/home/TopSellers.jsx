@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AuthorImage from "../../images/author_thumbnail.jpg";
 import SectionHeader from "../UI/SectionHeader";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import "./HotCollections.css";
 
 const TopSellers = () => {
@@ -9,6 +11,14 @@ const TopSellers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const skeletonItems = new Array(12).fill(0);
+
+  React.useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  }, []);
 
   useEffect(() => {
     const fetchTopSellers = async () => {
@@ -36,7 +46,7 @@ const TopSellers = () => {
           <SectionHeader title="Top Sellers" />
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-12" data-aos="fade-up" data-aos-delay="100">
             {error && (
               <div className="text-center">
                 <p className="text-danger">{error}</p>

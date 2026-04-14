@@ -9,6 +9,8 @@ import nftImage from "../../images/nftImage.jpg";
 import NFTCard from "../UI/NFTCard";
 import { CustomNextArrow, CustomPrevArrow } from "../UI/SliderArrows";
 import SectionHeader from "../UI/SectionHeader";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import "./HotCollections.css";
 
 const NewItems = () => {
@@ -16,6 +18,14 @@ const NewItems = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const skeletonItems = new Array(8).fill(0);
+
+  React.useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  }, []);
 
   const sliderSettings = {
     dots: false,
@@ -75,7 +85,7 @@ const NewItems = () => {
           <SectionHeader title="New Items" />
         </div>
         <div className="row">
-          <div className="col-lg-12">
+          <div className="col-lg-12" data-aos="fade-up" data-aos-delay="100">
             {error && (
               <div className="text-center">
                 <p className="text-danger">{error}</p>
