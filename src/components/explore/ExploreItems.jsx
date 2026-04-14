@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import NFTCard from "../UI/NFTCard";
 import SkeletonCard from "../UI/SkeletonCard";
@@ -34,7 +33,7 @@ const ExploreItems = () => {
     };
 
     fetchExploreItems();
-  }, [currentFilter]);
+  }, [currentFilter, itemsToShow]);
 
   const handleFilterChange = (e) => {
     const newFilter = e.target.value;

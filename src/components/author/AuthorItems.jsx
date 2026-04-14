@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import NFTCard from "../UI/NFTCard";
 import SkeletonCard from "../UI/SkeletonCard";
 import axios from "axios";

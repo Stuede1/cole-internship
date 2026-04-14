@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
 import SectionHeader from "../UI/SectionHeader";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
