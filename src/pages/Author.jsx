@@ -15,6 +15,8 @@ const Author = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    
     const fetchAuthorData = async () => {
       try {
         console.log('Fetching author with ID:', authorId); // Debug log
